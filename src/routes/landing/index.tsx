@@ -7,7 +7,7 @@ import {
   Progress,
   Text,
 } from "@mantine/core";
-import React from "react";
+import React, { useState } from "react";
 import * as styles from "./index.modules.css";
 import {
   IconPlayerPlay,
@@ -16,10 +16,21 @@ import {
   IconPlayerPause,
   IconPlayerSkipForward,
   IconPlayerSkipBack,
-  IconVolume
+  IconVolume,
+  IconAdjustmentsAlt
 } from "@tabler/icons";
+import { useRecoilState } from "recoil";
+import { isPlayingState } from "../../atoms/songAtom";
 
 const Home = () => {
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
+
+  const [volume, setVolume] = useState(50);
+
+  const handlePlayPause = () => {
+    setIsPlaying(true)
+  };
+
   return (
     <Container
       size="xl"
@@ -28,26 +39,58 @@ const Home = () => {
     >
       <Center style={{ width: "100%", height: "100%" }}>
         <Flex direction="column" style={{ width: "100%" }}>
-          <Progress value={50} color="orange"  style={{ width: "100%" }} />
+          <Progress value={10} color="orange" style={{ width: "100%" }} />
 
           <Grid style={{ marginTop: 10 }}>
             <Col span={5}>
               <Text weight={700} size="xl" style={{ color: "white" }}>
                 MUD
               </Text>
-              <Text>by Flumes</Text>
+              <Text style={{ color: "white" }} size="xs">by Flumes</Text>
             </Col>
             <Col span={3}>
-              <Flex align="center" gap="xl" style={{cursor: 'pointer'}}>
+              <Flex align="center" gap="xl">
                 {/* <IconPlayerSkipBack /> */}
-                <IconPlayerTrackPrev color="white" stroke={2} size={26} />
-                <IconPlayerPlay color="white" stroke={2} size={36} />
-                <IconPlayerTrackNext color="white" stroke={2} size={26} />
+                <IconPlayerTrackPrev
+                  color="white"
+                  stroke={2}
+                  size={26}
+                  style={{ cursor: "pointer" }}
+                />
+                {isPlaying ? (
+                  <IconPlayerPause
+                    color="white"
+                    stroke={2}
+                    size={36}
+                    style={{ cursor: "pointer" }}
+                    onClick={handlePlayPause}
+                  />
+                ) : (
+                  <IconPlayerPlay
+                    color="white"
+                    stroke={2}
+                    size={36}
+                    style={{ cursor: "pointer" }}
+                    onClick={handlePlayPause}
+                  />
+                )}
+                <IconPlayerTrackNext
+                  color="white"
+                  stroke={2}
+                  size={26}
+                  style={{ cursor: "pointer" }}
+                />
               </Flex>
             </Col>
-            <Col span={4}> 
-              <Flex align="flex-end" justify="flex-end" style={{marginRight: 40}}>
-              <IconVolume color="white" stroke={2} size={26} />
+            <Col span={4}>
+              <Flex
+                align="flex-end"
+                justify="flex-end"
+                gap="md"
+                style={{ marginRight: 40 }}
+              >
+                <IconVolume color="white" stroke={2} size={26}  />
+                <IconAdjustmentsAlt color="white" stroke={2} size={26} />
               </Flex>
             </Col>
           </Grid>
